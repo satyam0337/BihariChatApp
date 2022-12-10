@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BihariApp</title>
+    <style>
+        body {
+
+            background-color: black;
+            font-family: "Comic Sans", "Comic Sans MS", Chalkboard, ChalkboardSE-Regular, "Marker Felt", Purisa, "URW Chancery L", cursive, sans-serif;
+        }
+
+        #form {
+            background: rgba(0, 0, 0, 0.15);
+            padding: 0.25rem;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            height: 3rem;
+            box-sizing: border-box;
+            backdrop-filter: blur(10px);
+            width: 50%;
+
+        }
+
+        #it {
+            border: none;
+            padding: 0 1rem;
+            flex-grow: 1;
+            border-radius: 2rem;
+            margin: 0.25rem;
+        }
+
+        #it:focus {
+            outline: none;
+        }
+
+        #form>input:nth-child(2) {
+            background: rgb(232, 248, 4);
+            border: none;
+            cursor: pointer;
+            padding: 0 1rem;
+            margin: 0.25rem;
+            border-radius: 3px;
+            outline: none;
+            color: rgb(0, 0, 0);
+        }
+
+        #messages {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        #messages>li {
+            padding: 0.5rem 1rem;
+        }
+
+        #messages>li:nth-child(odd) {
+            color: #efefef;
+        }
+
+        #messages>li:nth-child(even) {
+            color: #a700ff;
+        }
+
+        #h {
+            display: flex;
+            justify-content: center;
+
+
+        }
+
+        #h1 {
+            position: fixed;
+
+            background-color: black;
+            text-align: center;
+            border: 2px solid silver;
+            width: 50%;
+            border-radius: 90%;
+            outline: none;
+            color: white
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="h">
+        <li id="h1"> webChat </li>
+    </div>
+    <ul id="messages"> </ul>
+
+
+    <form id="form">
+        <input id="it" type="text" autocomplete="off" placeholder="Type here...." autofocus/>
+        <input type="submit" value="send" />
+    </form>
+
+
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+
+        const socket = io();
+        const form = document.getElementById("form")
+        const input = document.getElementById("it")
+        const msgs = document.getElementById("messages")
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            console.log("message", input.value);
+            const message = input.value;
+            socket.emit("newtxt", message)
+            input.value = "";
+        })
+        socket.on("newtxt", (msg) => {
+            // console.log('got new msg', msg)
+            const div = document.createElement("li")
+            div.innerText = msg;
+            msgs.appendChild(div)
+            window.scrollTo(0, document.body.scrollHeight)
+        })
+        socket.on("newuser", () => {
+            // console.log('got new msg', msg)
+            const div = document.createElement("li")
+            div.innerText = "new user joined";
+            msgs.appendChild(div)
+            window.scrollTo(0, document.body.scrollHeight)
+
+        })
+        socket.on("history", (history) => {
+            for (const h of history) {
+                const div = document.createElement("li")
+                div.innerText = h;
+                msgs.appendChild(div)
+                window.scrollTo(0, document.body.scrollHeight)
+
+            }
+
+        })
+
+
+    </script>
+
+</body>
+
+</html>
