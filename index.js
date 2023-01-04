@@ -2,7 +2,7 @@ const express = require('express')
 const http = require("http")
 const app = express()
 const { Server } = require("socket.io")
-
+require("dotenv")
 const httpServer = http.createServer(app)
 const io = new Server(httpServer)
 const PORT = process.env.PORT   
