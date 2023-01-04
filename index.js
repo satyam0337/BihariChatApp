@@ -2,10 +2,10 @@ const express = require('express')
 const http = require("http")
 const app = express()
 const { Server } = require("socket.io")
-require("dotenv")
+require("dotenv").config()
 const httpServer = http.createServer(app)
 const io = new Server(httpServer)
-const PORT = process.env.PORT   
+const PORT = process.env.PO   
 
 let totalusers = 0;
 const history = []
@@ -40,5 +40,5 @@ app.get('/', (req, res) => res.sendFile(__dirname + "/index.html"))
 
 
 httpServer.listen(PORT, () => {
-    console.log('server started on port 8080');
+    console.log('server started on port 8000');
 })
