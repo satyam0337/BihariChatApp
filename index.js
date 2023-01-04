@@ -5,8 +5,7 @@ const { Server } = require("socket.io")
 
 const httpServer = http.createServer(app)
 const io = new Server(httpServer)
-
-    
+const PORT = process.env.PORT   
 
 let totalusers = 0;
 const history = []
@@ -40,6 +39,6 @@ app.use(express.json())
 app.get('/', (req, res) => res.sendFile(__dirname + "/index.html"))
 
 
-httpServer.listen(8080, () => {
+httpServer.listen(PORT, () => {
     console.log('server started on port 8080');
 })
